@@ -1,0 +1,114 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container-fluid">
+
+    <div class="mb-4">
+        <h2 class="fw-bold">Admin Dashboard</h2>
+        
+    </div>
+
+    <div class="row g-4 mb-4">
+
+        <!-- Total Employees -->
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Total Employees</h6>
+
+                    <a asp-controller="Admin"
+                       asp-action="Employees"
+                       class="text-decoration-none">
+
+                        <h2 class="fw-bold text-primary mb-0">
+                            @ViewBag.TotalEmployees
+                        </h2>
+
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Leave Requests -->
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Total Leave Requests</h6>
+
+                    <a asp-controller="Admin"
+                       asp-action="LeaveRequests"
+                       class="text-decoration-none">
+
+                        <h2 class="fw-bold text-dark mb-0">
+                            @ViewBag.TotalLeaveRequests
+                        </h2>
+
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending -->
+        <div class="col-md-2">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Pending</h6>
+
+                    <a asp-controller="Admin"
+                       asp-action="LeaveRequests"
+                       asp-route-status="Pending"
+                       class="text-decoration-none">
+
+                        <h2 class="fw-bold text-warning mb-0">
+                            @ViewBag.PendingRequests
+                        </h2>
+
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Approved -->
+        <div class="col-md-2">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Approved</h6>
+
+                    <a asp-controller="Admin"
+                       asp-action="LeaveRequests"
+                       asp-route-status="Approved"
+                       class="text-decoration-none">
+
+                        <h2 class="fw-bold text-success mb-0">
+                            @ViewBag.ApprovedRequests
+                        </h2>
+
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rejected -->
+        <div class="col-md-2">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Rejected</h6>
+
+                    <a asp-controller="Admin"
+                       asp-action="LeaveRequests"
+                       asp-route-status="Rejected"
+                       class="text-decoration-none">
+
+                        <h2 class="fw-bold text-danger mb-0">
+                            @ViewBag.RejectedRequests
+                        </h2>
+
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>    
+
+</div>

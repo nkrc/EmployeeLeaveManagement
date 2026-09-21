@@ -1,0 +1,49 @@
+﻿@model EmployeeLeaveManagement.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h3 class="text-center mb-4">Employee Leave Management</h3>
+
+                <form asp-action="Login" method="post">
+                    <div asp-validation-summary="ModelOnly"
+                         class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email"
+                               class="form-control"
+                               placeholder="Enter email" />
+                        <span asp-validation-for="Email"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password"
+                               class="form-control"
+                               placeholder="Enter password" />
+                        <span asp-validation-for="Password"
+                              class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        Login
+                    </button>
+                </form>
+
+                <hr />
+
+                <div class="small text-muted">
+                    <strong>Admin:</strong> admin@example.com / admin123<br />
+                    <strong>Employee:</strong> employee@example.com / emp123
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

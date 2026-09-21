@@ -1,0 +1,251 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Employee Leave Management</title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/EmployeeLeaveManagement.styles.css"
+          asp-append-version="true" />
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+
+                <!-- Left Drawer Button -->
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <button class="btn btn-outline-secondary"
+                            type="button"
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#sideDrawer"
+                            aria-controls="sideDrawer">
+                        ☰
+                    </button>
+                }
+
+                <!-- Center Application Name -->
+                <div class="navbar-title">
+                    <span class="fw-bold">
+                        Employee Leave Management
+                    </span>
+                </div>
+
+                <!-- Right Logout -->
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <form asp-controller="Account"
+                          asp-action="Logout"
+                          method="post"
+                          class="m-0">
+
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit"
+                                class="btn btn-outline-danger"
+                                title="Logout"
+                                aria-label="Logout">
+                            ⇥
+                            <span class="d-none d-md-inline">
+                                Logout
+                            </span>
+                        </button>
+                    </form>
+                }
+
+            </div>
+        </nav>
+    </header>
+
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <div class="offcanvas offcanvas-start"
+             tabindex="-1"
+             id="sideDrawer"
+             aria-labelledby="sideDrawerLabel">
+
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="sideDrawerLabel">
+                    Hi, @User.Identity.Name
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="offcanvas">
+                </button>
+            </div>
+
+            <div class="offcanvas-body">
+
+                @if (User.IsInRole("Employee"))
+                {
+                    <div class="list-group">
+
+                        <a asp-controller="Employee"
+                           asp-action="Dashboard"
+                           class="list-group-item list-group-item-action">
+                            Dashboard
+                        </a>
+
+                        <a asp-controller="Employee"
+                           asp-action="Dashboard"
+                           class="list-group-item list-group-item-action">
+                            Apply Leave
+                        </a>
+
+                        <a asp-controller="Employee"
+                           asp-action="MyLeaves"
+                           class="list-group-item list-group-item-action">
+                            My Leave Requests
+                        </a>
+
+                    </div>
+                }
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="list-group">
+
+                        <a asp-controller="Admin"
+                           asp-action="Dashboard"
+                           class="list-group-item list-group-item-action">
+                            Dashboard
+                        </a>
+
+                        <a asp-controller="Admin"
+                           asp-action="Employees"
+                           class="list-group-item list-group-item-action">
+                            Manage Employees
+                        </a>
+
+                        <a class="list-group-item list-group-item-action"
+                           asp-controller="Admin"
+                           asp-action="LeaveRequests">
+                            Leave Requests
+                        </a>
+
+                        <a class="list-group-item list-group-item-action"
+                           asp-controller="Admin"
+                           asp-action="Reports">
+                            Reports
+                        </a>
+
+                    </div>
+                }
+
+            </div>
+        </div>
+    }
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2026 - Employee Leave Management
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+    @if (TempData["SuccessMessage"] != null || TempData["ErrorMessage"] != null)
+    {
+        <div class="toast-container position-fixed top-0 end-0 p-3"
+             style="z-index: 9999;">
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="toast align-items-center text-bg-success border-0"
+                     role="alert"
+                     aria-live="assertive"
+                     aria-atomic="true"
+                     id="successToast">
+
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <strong>Success:</strong>
+                            @TempData["SuccessMessage"]
+                        </div>
+
+                        <button type="button"
+                                class="btn-close btn-close-white me-2 m-auto"
+                                data-bs-dismiss="toast"
+                                aria-label="Close">
+                        </button>
+                    </div>
+                </div>
+            }
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+
+                    var successToastElement = document.getElementById("successToast");
+
+                    if (successToastElement) {
+                        var successToast = new bootstrap.Toast(successToastElement, {
+                            delay: 4000
+                        });
+
+                        successToast.show();
+                    }
+
+                    var errorToastElement = document.getElementById("errorToast");
+
+                    if (errorToastElement) {
+                        var errorToast = new bootstrap.Toast(errorToastElement, {
+                            delay: 5000
+                        });
+
+                        errorToast.show();
+                    }
+
+                });
+            </script>
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="toast align-items-center text-bg-danger border-0"
+                     role="alert"
+                     aria-live="assertive"
+                     aria-atomic="true"
+                     id="errorToast">
+
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <strong>Error:</strong>
+                            @TempData["ErrorMessage"]
+                        </div>
+
+                        <button type="button"
+                                class="btn-close btn-close-white me-2 m-auto"
+                                data-bs-dismiss="toast"
+                                aria-label="Close">
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</body>
+</html>

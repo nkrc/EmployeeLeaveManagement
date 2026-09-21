@@ -1,0 +1,78 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+
+.dashboard-card {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 24px;
+    text-align: left;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+}
+
+    .dashboard-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 14px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+    }
+
+.card-title {
+    display: block;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 12px;
+}
+
+.card-count {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.navbar-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.25rem;
+    white-space: nowrap;
+}
+
+@media (max-width: 576px) {
+    .navbar-title {
+        position: static;
+        transform: none;
+        margin-left: 15px;
+        font-size: 1rem;
+    }
+}

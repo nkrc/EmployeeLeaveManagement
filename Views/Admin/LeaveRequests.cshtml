@@ -1,0 +1,217 @@
+﻿@model IEnumerable<EmployeeLeaveManagement.Models.LeaveRequest>
+
+@{
+    ViewData["Title"] = "Leave Requests";
+    var selectedStatus = ViewBag.SelectedStatus as string ?? "All";
+}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">Leave Requests</h2>            
+        </div>
+
+        <a asp-controller="Admin"
+           asp-action="Dashboard"
+           class="btn btn-outline-secondary">
+            Back to Dashboard
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+
+            <form asp-action="LeaveRequests"
+                  method="get"
+                  class="row g-3 mb-4">
+
+                <div class="col-md-4">
+                    <label class="form-label">Filter by Status</label>
+
+                    <select name="status"
+                            class="form-select"
+                            onchange="this.form.submit()">
+
+                        <option value="All"
+                                selected="@(selectedStatus == "All")">
+                            All
+                        </option>
+
+                        <option value="Pending"
+                                selected="@(selectedStatus == "Pending")">
+                            Pending
+                        </option>
+
+                        <option value="Approved"
+                                selected="@(selectedStatus == "Approved")">
+                            Approved
+                        </option>
+
+                        <option value="Rejected"
+                                selected="@(selectedStatus == "Rejected")">
+                            Rejected
+                        </option>
+
+                        <option value="Withdrawn"
+                                selected="@(selectedStatus == "Withdrawn")">
+                            Withdrawn
+                        </option>
+                    </select>
+                </div>
+
+            </form>
+
+            @if (!Model.Any())
+            {
+                <div class="text-center py-5">
+                    <h5>No leave requests found</h5>
+                    <p class="text-muted">
+                        There are no leave requests for the selected filter.
+                    </p>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-light">
+                            <tr>
+                                <th>Employee</th>
+                                <th>Email</th>
+                                <th>From Date</th>
+                                <th>To Date</th>
+                                <th>Reason</th>
+                                <th>Applied At</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var leave in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>
+                                            @leave.Employee?.Name
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        @leave.Employee?.Email
+                                    </td>
+
+                                    <td>
+                                        @leave.FromDate.ToString("dd-MM-yyyy")
+                                    </td>
+
+                                    <td>
+                                        @leave.ToDate.ToString("dd-MM-yyyy")
+                                    </td>
+
+                                    <td>
+                                        @leave.Reason
+                                    </td>
+
+                                    <td>
+                                        @leave.AppliedAt.ToLocalTime().ToString("dd-MM-yyyy hh:mm tt")
+                                    </td>
+
+                                    <td>
+                                        @if (leave.Status == "Pending")
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                Pending
+                                            </span>
+                                        }
+                                        else if (leave.Status == "Approved")
+                                        {
+                                            <span class="badge bg-success">
+                                                Approved
+                                            </span>
+                                        }
+                                        else if (leave.Status == "Rejected")
+                                        {
+                                            <span class="badge bg-danger">
+                                                Rejected
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+                                                @leave.Status
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @if (leave.Status == "Pending")
+                                        {
+                                            <div class="d-flex gap-2">
+
+                                                <form asp-action="ApproveLeave"
+                                                      method="post">
+
+                                                    <input type="hidden"
+                                                           name="id"
+                                                           value="@leave.Id" />
+
+                                                    @Html.AntiForgeryToken()
+
+                                                    <button type="submit"
+                                                            class="btn btn-sm btn-success">
+                                                        Approve
+                                                    </button>
+                                                </form>
+
+                                                <form asp-action="RejectLeave"
+                                                      method="post">
+
+                                                    <input type="hidden"
+                                                           name="id"
+                                                           value="@leave.Id" />
+
+                                                    @Html.AntiForgeryToken()
+
+                                                    <button type="submit"
+                                                            class="btn btn-sm btn-danger">
+                                                        Reject
+                                                    </button>
+                                                </form>
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                No action
+                                            </span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

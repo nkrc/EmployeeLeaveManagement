@@ -1,0 +1,201 @@
+﻿@model EmployeeLeaveManagement.ViewModels.LeaveReportViewModel
+
+@{
+    ViewData["Title"] = "Leave Reports";
+}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">Leave Reports</h2>
+            <p class="text-muted mb-0">
+                Search and export leave requests
+            </p>
+        </div>
+
+        <a asp-controller="Admin"
+           asp-action="Dashboard"
+           class="btn btn-outline-secondary">
+            Back to Dashboard
+        </a>
+    </div>
+
+    <!-- Search Filters -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+
+            <form asp-action="Reports"
+                  method="get"
+                  class="row g-3 align-items-end">
+
+                <div class="col-md-3">
+                    <label asp-for="FromDate" class="form-label">
+                        From Date
+                    </label>
+
+                    <input asp-for="FromDate"
+                           class="form-control" />
+                </div>
+
+                <div class="col-md-3">
+                    <label asp-for="ToDate" class="form-label">
+                        To Date
+                    </label>
+
+                    <input asp-for="ToDate"
+                           class="form-control" />
+                </div>
+
+                <div class="col-md-3">
+                    <label asp-for="Status" class="form-label">
+                        Status
+                    </label>
+
+                    <select asp-for="Status"
+                            class="form-select">
+
+                        <option value="All">All</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                        <option value="Withdrawn">Withdrawn</option>
+
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <button type="submit"
+                            class="btn btn-primary">
+                        Search
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+    <!-- Results Table -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="card-title mb-0">
+                    Leave Requests
+                </h5>
+
+                <div class="d-flex gap-2">
+
+                    <a asp-controller="Admin"
+                       asp-action="ExportExcel"
+                       asp-route-fromDate="@Model.FromDate?.ToString("yyyy-MM-dd")"
+                       asp-route-toDate="@Model.ToDate?.ToString("yyyy-MM-dd")"
+                       asp-route-status="@Model.Status"
+                       class="btn btn-success">
+                        <i class="bi bi-file-earmark-excel"></i>
+                        Excel
+                    </a>
+
+                    <a asp-controller="Admin"
+                       asp-action="ExportPdf"
+                       asp-route-fromDate="@Model.FromDate?.ToString("yyyy-MM-dd")"
+                       asp-route-toDate="@Model.ToDate?.ToString("yyyy-MM-dd")"
+                       asp-route-status="@Model.Status"
+                       class="btn btn-danger">
+                        <i class="bi bi-file-earmark-pdf"></i>
+                        PDF
+                    </a>
+
+                </div>
+            </div>
+
+            @if (!Model.LeaveRequests.Any())
+            {
+                <div class="text-center text-muted py-5">
+                    No leave requests found.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-light">
+                            <tr>
+                                <th>Employee</th>
+                                <th>Email</th>
+                                <th>From Date</th>
+                                <th>To Date</th>
+                                <th>Reason</th>
+                                <th>Applied At</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var leave in Model.LeaveRequests)
+                            {
+                                <tr>
+                                    <td>
+                                        @leave.Employee?.Name
+                                    </td>
+
+                                    <td>
+                                        @leave.Employee?.Email
+                                    </td>
+
+                                    <td>
+                                        @leave.FromDate.ToString("dd-MM-yyyy")
+                                    </td>
+
+                                    <td>
+                                        @leave.ToDate.ToString("dd-MM-yyyy")
+                                    </td>
+
+                                    <td>
+                                        @leave.Reason
+                                    </td>
+
+                                    <td>
+                                        @leave.AppliedAt.ToLocalTime().ToString("dd-MM-yyyy hh:mm tt")
+                                    </td>
+
+                                    <td>
+                                        @if (leave.Status == "Pending")
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                Pending
+                                            </span>
+                                        }
+                                        else if (leave.Status == "Approved")
+                                        {
+                                            <span class="badge bg-success">
+                                                Approved
+                                            </span>
+                                        }
+                                        else if (leave.Status == "Rejected")
+                                        {
+                                            <span class="badge bg-danger">
+                                                Rejected
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+                                                @leave.Status
+                                            </span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            }
+
+        </div>
+    </div>
+
+</div>
